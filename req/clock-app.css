@@ -1,0 +1,481 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+* {
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+*::selection {
+    background: #afdde5;
+}
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+*::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+*::-webkit-scrollbar-thumb:active {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.app .root {
+    height: 100vh;
+    overflow: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+.header {
+    padding: 0.8em 1em;
+    background-color: #ffffff;
+    border-radius: 150px;
+    box-shadow: 0px 4px 7px 0px #00000026;
+    display: flex;
+    align-items: center;
+}
+.header .time-now {
+    font-weight: bolder;
+    font-family: 'Lato', sans-serif;
+    font-size: 2.3em;
+    width: 5em;
+    text-align: center;
+}
+.header .phrase {
+    font-size: 1.1em;
+    text-align: center;
+    flex-grow: 1;
+}
+.phrase * {
+    font-family: 'Patrick Hand', cursive;
+}
+.phrase .author {
+    color: rgb(96, 192, 187);
+    margin-inline-start: 0.4em;
+}
+.box-sett {
+    background-color: rgba(0, 0, 0, 0.418);
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8em;
+    padding-block-end: 3em;
+    transition: all 0.3s;
+    opacity: 0;
+    display: none;
+}
+.modal-alert {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffffa5;
+    z-index: 2;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding-block-end: 3em;
+    backdrop-filter: blur(0.1em);
+    transition: opacity 0.2s;
+    opacity: 0;
+    cursor: not-allowed;
+}
+.modal-alert.on {
+    opacity: 1;
+}
+.modal-alert .alert {
+    cursor: progress;
+    padding: 1em 1.22em;
+    background-color: white;
+    border-radius: 0.6em;
+    padding-block-end: 1.2em;
+    display: flex;
+    justify-content: center;
+    gap: 0.9em;
+    align-items: center;
+    font-size: 1.1em;
+    color: #e61e1e;
+    box-shadow: 0 0.6em 1.1em 0.1em #00000022;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transform: translateY(-50%) scale(1);
+    opacity: 0;
+}
+.modal-alert.on .alert {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+.open.box-sett {
+    opacity: 1;
+}
+.box-sett .box {
+    position: relative;
+    overflow: hidden;
+    padding: 0.8em 1em;
+    border-radius: 18px;
+    background-color: white;
+    border: 2px solid #cecece;
+    box-shadow: 0px 4px 7px 0px #00000026;
+    max-height: 90vh;
+    width: 100%;
+    max-width: 600px;
+    transition: all 0.2s;
+    transform: translateY(20px) scale(0.7);
+}
+.open.box-sett .box {
+    transform: none;
+}
+.box-title {
+    font-size: 1.5em;
+    text-align: center;
+    font-weight: bold;
+    margin-block-end: 1.4em;
+}
+.box-options {
+    margin-block-start: 1.1em;
+    margin-block-end: 0.2em;
+    display: flex;
+    gap: 0.6em;
+    justify-content: flex-end;
+}
+.box-options a.btn {
+    padding: 0.3em 0.8em;
+    font-size: 1.1em;
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+}
+.box-options a.btn:hover * {
+    color: white;
+}
+.box-options a.btn i {
+    font-size: 0.95em;
+    width: 1.8em;
+    text-align: start;
+}
+.box-options a.btn span {
+    margin-inline-end: 0.4em;
+}
+.box-options a.btn.cancel {
+    border-color: hsl(0, 65%, 41%);
+    color: hsl(0, 65%, 41%);
+}
+.box-options a.btn.cancel:hover {
+    background-color: hsl(0, 65%, 41%);
+}
+.box-options a.btn.done {
+    border-color: hsl(112, 65%, 41%);
+    color: hsl(112, 65%, 41%);
+}
+.box-options a.btn.done:hover {
+    background-color: hsl(112, 65%, 41%);;
+}
+.box-body .value {
+    display: flex;
+    margin-block-end: 0.5em;
+    align-items: flex-start;
+}  
+.box-body .param {
+    font-weight: bold;
+    font-size: 1.03em;
+    width: 6.4em;
+    transform: translateY(0.2em);
+}
+.box-body .param::after {
+    content: ":";
+}
+.box-body .sett {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-inline-start: 0.8em;
+    align-items: flex-start;
+}
+.box-body {
+    padding: 0.1em 0.3em;
+}
+.box-body .input {
+    margin-block-end: 0.4em;
+}
+.box-body .sett input {
+    padding: 0.3em 0.7em;
+    border-radius: 0;
+    border-width: 2px;
+    margin-inline-end: 0.3em;
+    border-style: solid;
+    border-color: #dadada;
+}
+.box-body .sett input:hover {
+    border-color: #a6a6a6;
+}
+.box-body .sett input:focus {
+    border-color: #424242;
+    outline: none;
+}
+.box-body .sett input[type=number] {
+    width: 5em;
+    max-width: 5em;
+    min-width: 5em;
+}
+.box-body .sett .input .val {
+    padding: 0.2em 0.7em;
+    background-color: rgb(219, 219, 219);
+}
+.box-body .sett .input span:first-child {
+    margin-inline-end: 0.3em;
+}
+.main .resume .controls .btn {
+    background-color: #e4e4e4;
+    margin-inline-end: 1em;
+    padding: 0.6em 1.2em;
+    border-radius: 2em;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.main {
+    padding-block-start: 1.3em;
+    padding-inline-start: 0.8em;
+    flex-grow: 1;
+    display: flex;
+    overflow: hidden;
+}
+@media screen and (min-width: 900px) {
+    .main {
+        flex-direction: row;
+    }
+    .main .cards {
+        padding: 0 1.5em;
+    }
+}
+@media screen and (max-width: 900px) {
+    .main {
+        flex-direction: column;
+    }
+    .main .cards {
+        margin-block-start: 2em;
+        padding: 0;
+        align-items: flex-start;
+    }
+}
+.main .resume {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.main .resume .controls {
+    display: flex;
+}
+.main .resume .controls .btn i {
+    width: 1.2em;
+}
+.main .resume .controls .btn span {
+    margin-inline-start: 0.3em;
+    margin-inline-end: 0.6em;
+}
+.main .resume .controls .btn:hover {
+    background-color: #bfbfbf;
+}
+[data-selected] > * {
+    opacity: 0.3;
+}
+[data-selected="0"] > *:nth-child(1) {
+    opacity: 1;
+}
+[data-selected="1"] > *:nth-child(2) {
+    opacity: 1;
+}
+.resume .info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    position: relative;
+    padding-block-start: 3em;
+    padding-block-end: 0.6em;
+}
+.resume .info #btn-step {
+    position: absolute;
+    right: 1em;
+    bottom: 1em;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 2em;
+    height: 2em;
+    width: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6em;
+    color: black;
+    transition: all 0.3s;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0px 4px 0px 0px black;
+}
+.resume .info #btn-step:hover {
+    color: white;
+    background-color: black;
+    transform: translateY(4px);
+    box-shadow: 0px 0px 0px 0px black;
+}
+.resume .count {
+    display: flex;
+    flex-direction: column;
+} 
+.resume .count .log-box {
+    display: flex;
+    margin-block-end: 1em;
+    align-items: flex-start;
+}
+.resume .count .log-box .log {
+    display: flex;
+    gap: 0.8em;
+    justify-content: flex-start;
+}
+.resume .count .log-box .name {
+    width: 5.2em;
+    font-weight: bold;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5em;
+}
+.resume .count .log-box .log span {
+    background-color: rgb(218, 218, 218);
+    border-radius: 0.2em;
+    padding: 0.4em 1.2em;
+    font-family: 'Spline Sans Mono', monospace;
+    font-size: 1.2em;
+}
+.main .cards {
+    height: 100%;
+    overflow-y: auto;
+    padding-block-end: 15vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1.3em;
+}
+.main .card {
+    padding: 1em 1.4em;
+    padding-inline-end: 7em;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 1em;
+    position: relative;
+}
+.card.good {
+    background-color: #e7ffd3;
+    border-color: #63c840;
+}  
+.card.bad {
+    background-color: #ffd3d3;
+    border-color: #c84040;
+}
+.card .c-icon {
+    position: absolute;
+    right: 0.6em;
+    bottom: 0.6em;
+    font-size: 1.4em;
+}
+.card.good .c-icon {
+    color: #63c840;
+}
+.card.bad .c-icon {
+    color: #c84040;
+}  
+.card .c-log {
+    font-size: 1.18em;
+    margin-block-end: 0.5em;
+}
+.main .card .c-start {
+    font-size: 1.8em;
+    margin-block-end: 0.9em;
+}
+.main .card .c-start span {
+    font-weight: bolder;
+}
+.main .card .c-log i {
+    text-align: start;
+    width: 2.3rem;
+}
+/* =============================================== */
+.resume .count #log-rest {
+    background-color: black;
+    color: white;
+}
+.resume .count .log span.closed {
+    background-color: #ff0000 !important;
+}
+.root.fail {
+    padding: 0;
+}
+.root .error-box {
+    height: 100vh;
+    width: 100%;
+    background-color: rgb(251, 225, 225);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block-end: 1.3em;
+}
+.error-box .error {
+    border-radius: 0.8em;
+    border: 3px solid red;
+    background-color: #ffefef;
+    border-top-width: 3em;
+    padding: 1.5em 1.2em;
+    max-width: 600px;
+}
+.error p.msg {
+    color: #b3b3b3;
+    margin-block-start: 1em;
+}
+.error p.custom {
+    margin-block-start: 1em;
+}
+.error p.custom::before {
+    content: 'Error:';
+    margin-inline-end: 1em;
+    color: red;
+    text-decoration: underline;
+}
+.error p.return {
+    margin-block-start: 2em;
+    display: flex;
+    justify-content: end;
+}
+.error .return a {
+    color: white;
+    padding: 0.8em 1.6em;
+    border-radius: 2em;
+    background-color: #d55d5d;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+.error .return a:hover {
+    background-color: red;
+}

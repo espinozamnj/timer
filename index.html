@@ -1,0 +1,151 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="req/clock-fav.png" type="image/png">
+    <link rel="stylesheet" href="req/clock-app.css">
+    <script src="req/phrases.js"></script>
+    <title>Clock</title>
+</head>
+<body>
+    <div class="app">
+        <div class="root">
+            <div class="box-sett">
+                <div class="box">
+                    <div class="modal-alert">
+                        <div class="alert">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>Complete todos los campos</span>
+                        </div>
+                    </div>
+                    <div class="box-title">Empezar conteo</div>
+                    <div class="box-body">
+                        <div class="value c-init">
+                            <div class="param">INICIO</div>
+                            <div class="sett" data-selected="0">
+                                <div class="input">
+                                    <label for="time-init">
+                                        <span>A las</span>
+                                        <input type="time" id="time-init">
+                                    </label>
+                                </div>
+                                <div class="input">
+                                    <label for="time-init-now">
+                                        <input id="time-init-now" type="button" value="Al comenzar el conteo">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="value c-alerts">
+                            <div class="param">ALERTAS</div>
+                            <div class="sett">
+                                <div class="input">
+                                    <label for="alerts">
+                                        <span>Recibir</span>
+                                        <input type="number" min="1" id="alerts">
+                                        <span>avisos</span>        
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="value c-extra">
+                            <div class="param">MARGEN</div>
+                            <div class="sett">
+                                <div class="input">
+                                    <label for="extra">
+                                        <span>Aviso faltando</span>
+                                        <input type="number" min="0" id="extra">
+                                        <span>min.</span>      
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="value c-ends">
+                            <div class="param">FINALIZA</div>
+                            <div class="sett" data-selected="1">
+                                <div class="input">
+                                    <label for="time-end">
+                                        <span>A las</span>
+                                        <input type="time" id="time-end">
+                                    </label>
+                                </div>
+                                <div class="input">
+                                    <label for="large">
+                                        <span>Después de</span>
+                                        <input type="number" min="1" id="large">
+                                        <span>min.</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-options">
+                        <a class="btn done" id="init-count">
+                            <i class="fa-solid fa-circle-play"></i>
+                            <span>Comenzar</span>
+                        </a>
+                        <a class="btn cancel">
+                            <i class="fa-solid fa-xmark"></i>
+                            <span>Abortar</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="header">
+                <div class="time-now">12:34</div>
+                <div class="phrase"></div>
+            </div>
+            <div class="main">
+                <div class="resume">
+                    <div class="controls">
+                        <a class="btn" id="init-config">
+                            <i class="fa-solid fa-play"></i>
+                            <span>Empezar</span>
+                        </a>
+                        <a class="btn" id="stop-count">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>Detener</span>
+                        </a>
+                        <audio id="alarm_audio" src="req/alarm.mp3"></audio>
+                        <audio id="alarm_finish" src="req/beep.mp3"></audio>
+                    </div>
+                    <div class="info">
+                        <div class="count">
+                            <div class="log-box alerts">
+                                <div class="name">ALERTAS</div>
+                                <div class="log">
+                                    <span id="log-alert">-</span>
+                                    <span id="log-alert-count">- / -</span>
+                                </div>
+                            </div>
+                            <div class="log-box used">
+                                <div class="name">USADO</div>
+                                <div class="log">
+                                    <span id="log-used">-</span>
+                                </div>
+                            </div>
+                            <div class="log-box rest">
+                                <div class="name">QUEDAN</div>
+                                <div class="log">
+                                    <span id="log-rest">-</span>
+                                    <span id="log-extra" style="display:none">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        <a id="btn-step">
+                            <i class="fa-solid fa-forward-step"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="cards"></div>
+            </div>
+        </div>
+        <div class="sjs">
+            <script>
+            </script>
+            <script src="req/clock-app.js"></script>
+        </div>
+    </div>
+</body>
+</html>
