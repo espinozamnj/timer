@@ -344,7 +344,11 @@ var main = {
                 mssn.resulst_start = (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
                 mssn.resulst_start += ', ' + $('#time-init').value + ':00'
             } else {
-                mssn.resulst_start = now.toLocaleString()
+                let other_format = now.toLocaleString()
+                result_my_format = other_format.split('/')
+                let group_temp = [result_my_format[1], result_my_format[0], result_my_format[2]]
+                result_my_format = group_temp.join('/')
+                mssn.resulst_start = result_my_format
             }
 
             mssn.start = new Date(mssn.resulst_start)
@@ -379,10 +383,10 @@ var main = {
                     group_intervals.push(new Date(summ))
                     i_group_count++
                 }
-                main.session.alerts = group_intervals
-                main.session.alerts_saved = []
+                mssn.alerts = group_intervals
+                mssn.alerts_saved = []
                 group_intervals.forEach(function(date) {
-                    main.session.alerts_saved.push(date)
+                    mssn.alerts_saved.push(date)
                 })
                 // console.log(distance)
 
@@ -395,6 +399,7 @@ var main = {
                 } else if (mssn.margen > mssn.ends.getTime() - mssn.start.getTime()) {
                     main.fn.errorAlert('Según tú, tienes más tiempo de margen de seguridad que el mismo tiempo que tienes para la resolución. NO ME JODAS')
                 }
+                console.log(mssn)
             })()
             function alertComplete() {
                 let modal = $('.modal-alert')
@@ -427,9 +432,9 @@ var main = {
         }
     })
     window.onbeforeunload = function() {
-        if (!main.temp.requestExit) {
-            return 'Please press the Logout button to logout.'
-        }
+        // if (!main.temp.requestExit) {
+        //     return 'Please press the Logout button to logout.'
+        // }
     };
     (function(){
         let test = false
