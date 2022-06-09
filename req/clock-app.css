@@ -314,38 +314,50 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    align-items: flex-start;
     position: relative;
     padding-block-start: 3em;
     padding-block-end: 0.6em;
 }
-.resume .info #btn-step {
+.resume .info .btn-float {
     position: absolute;
-    right: 1em;
+    left: auto;
     bottom: 1em;
     background-color: white;
     border: 3px solid black;
     border-radius: 2em;
-    height: 2em;
-    width: 2em;
+    height: 3.1em;
+    width: 3.1em;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.6em;
     color: black;
     transition: all 0.3s;
     text-decoration: none;
     cursor: pointer;
     box-shadow: 0px 4px 0px 0px black;
 }
-.resume .info #btn-step:hover {
+.resume .info .btn-float i {
+    font-size: 1.6em;
+}
+.resume .info .btn-float:hover {
     color: white;
     background-color: black;
     transform: translateY(4px);
     box-shadow: 0px 0px 0px 0px black;
 }
+.resume .info #btn-step {
+    right: 0.5em;
+}
+.resume .info #btn-pip {
+    right: 5em;
+}
 .resume .count {
     display: flex;
     flex-direction: column;
+    padding: 0.4em;
+    padding-left: 0.8em;
+    transform: translateX(-0.8em)
 } 
 .resume .count .log-box {
     display: flex;
@@ -369,6 +381,26 @@
     padding: 0.4em 1.2em;
     font-family: 'Spline Sans Mono', monospace;
     font-size: 1.2em;
+}
+.resume .pip {
+    display: block;
+}
+.resume .pip canvas {
+    height: 0px;
+    overflow: hidden;
+    opacity: 0.3;
+}
+.resume .pip > * {
+    border: 1px solid rgb(150, 150, 150);
+}
+.pip #video {
+    position: fixed;
+    display: none;
+    right: 10px;
+    bottom: 6em;
+    z-index: 5;
+    transform-origin: bottom right;
+    transform: scale(0.66);
 }
 .main .cards {
     height: 100%;

@@ -133,23 +133,25 @@
                                 </div>
                             </div>
                         </div>
-                        <a id="btn-step">
+                        <div class="pip">
+                            <style id="css-pip"></style>
+                            <video id="video"></video>
+                            <canvas id="canvas"></canvas>
+                        </div>
+                        <a id="btn-pip" class="btn-float">
+                            <i class="fa-solid fa-clone"></i>
+                        </a>
+                        <a id="btn-step" class="btn-float">
                             <i class="fa-solid fa-forward-step"></i>
                         </a>
                     </div>
-                    <div class="pip">
-                        <!-- https://codepen.io/espinozamnj/pen/ZErqMmG?editors=0010 -->
-                        <style id="css-pip"></style>
-                        <video id="video"></video>
-                        <canvas id="canvas"></canvas>
-                    </div>
+                    
                 </div>
                 <div class="cards"></div>
             </div>
         </div>
         <div class="sjs">
-            <script>
-            </script>
+            <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
             <script src="req/clock-app.js"></script>
         </div>
     </div>

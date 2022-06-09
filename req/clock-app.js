@@ -22,18 +22,26 @@ var main = {
     }
     main.e = {
         phrase: $('.phrase'),
-        time_now: $('.time-now')
+        time_now: $('.time-now'),
+        canvas: $('#canvas'),
+        video: $('#video'),
     }
     main.data = {
         interval_every: 5e2,
         interval_pharses_seconds: 60,
+        interval_canvas_update_seconds: 1,
         phrases: JSON.parse(JSON.stringify(all_phrases)),
-        errorMessage: 'so basura tarada, adefecio humano, crees que no me esperaba que harias esto, ponte a usarlo y deja de hacer pruebas de error :)'
+        errorMessage: 'so basura tarada, adefecio humano, crees que no me esperaba que harias esto, ponte a usarlo y deja de hacer pruebas de error :)',
+        draws: {
+            cvCtx:  main.e.canvas.getContext('2d'),
+            size: {h: 500, w: 300},
+        },
     }
     shuffleArray(main.data.phrases)
     main.temp = {
         phrase_count_time: 0,
-        requestExit: false
+        requestExit: false,
+        udate_canvas_time: 2,
     }
     main.fn = {
         reload: function () {
@@ -236,6 +244,15 @@ var main = {
             if (main.session.start != undefined) {
                 // console.log(main.session.start)
                 if (int_now < main.session.ends.getTime() + 1e3) {
+                    let update_canvas = false
+                    if (main.temp.udate_canvas_time == 1e3 / main.data.interval_every * main.data.interval_canvas_update_seconds) {
+                        update_canvas = true
+                        main.temp.udate_canvas_time = 0
+                    } else {
+                        update_canvas = false
+                        main.temp.udate_canvas_time++
+                    }
+
                     $('#log-rest').classList.remove('closed')
                     if (main.session.alerts.length > 0) {
                         if (int_now > main.session.alerts[0].getTime()) {
@@ -272,6 +289,14 @@ var main = {
                     $('#log-used').innerText = main.fn.difference_time(int_now, main.session.start.getTime() * -1, true)
                     let ends_min_extra = main.session.ends.getTime() - main.session.margen * 1e3
                     $('#log-rest').innerText = main.fn.difference_time(ends_min_extra, int_now * -1, true)
+
+                    if (update_canvas) {
+                        html2canvas(document.querySelector(".count")).then(canvas => {
+                            main.e.canvas.width = canvas.width
+                            main.e.canvas.height = canvas.height
+                            main.data.draws.cvCtx.drawImage(canvas, 0, 0)
+                        })
+                    }
                 } else {
                     if (!$('.error')) {
                         $('#log-rest').classList.add('closed')
@@ -399,7 +424,6 @@ var main = {
                 } else if (mssn.margen > mssn.ends.getTime() - mssn.start.getTime()) {
                     main.fn.errorAlert('Según tú, tienes más tiempo de margen de seguridad que el mismo tiempo que tienes para la resolución. NO ME JODAS')
                 }
-                console.log(mssn)
             })()
             function alertComplete() {
                 let modal = $('.modal-alert')
@@ -419,6 +443,20 @@ var main = {
                 alertComplete()
             } else {
                 if (!$('.error')) {
+                    setTimeout(function() {
+                        let canv = main.e.canvas
+                        let video = main.e.video
+                        video.srcObject = canv.captureStream()
+                        video.muted = true
+                        video.play()
+                        $('#btn-pip').addEventListener('click', function(){
+                            if (document.pictureInPictureElement == null) {
+                                video.requestPictureInPicture()
+                            } else {
+                                document.exitPictureInPicture()
+                            }
+                        })
+                    }, 1e3)
                     console.log(main.session)
                     $('.btn.cancel').click()
                 }
@@ -432,12 +470,12 @@ var main = {
         }
     })
     window.onbeforeunload = function() {
-        // if (!main.temp.requestExit) {
-        //     return 'Please press the Logout button to logout.'
-        // }
+        if (!main.temp.requestExit) {
+            return 'Please press the Logout button to logout.'
+        }
     };
     (function(){
-        let test = false
+        let test = true
         if (test) {
             $('#init-config').click()
             function next_minute() {
@@ -452,6 +490,7 @@ var main = {
             }
             let next = next_minute()
             let value_format = main.fn.decimal(next.getHours()) + ':' + main.fn.decimal(next.getMinutes())
+            $('#large').value = 5
             $('#time-init').value = value_format
             $('#alerts').value = 10
         }
