@@ -31,7 +31,8 @@ var main = {
         interval_pharses_seconds: 60,
         interval_canvas_update_seconds: 1,
         phrases: JSON.parse(JSON.stringify(all_phrases)),
-        errorMessage: 'so basura tarada, adefecio humano, crees que no me esperaba que harias esto, ponte a usarlo y deja de hacer pruebas de error :)',
+        errorMessage: '¡Configuración no válida!',
+        requestCanvas: false,
         draws: {
             cvCtx:  main.e.canvas.getContext('2d'),
             size: {h: 500, w: 300},
@@ -60,15 +61,11 @@ var main = {
         now: function() {
             return new Date().getTime()
         },
-        cvtTime: function() {
-            let s = this.split(':'),
+        cvtTime: function(timeStr) {
+            let s = timeStr.split(':'),
             result = ''
-            function nif(n){
-                let sl = s.length,
-                    or = sl - n
-                    nn = s[or]
-                    nn = Number(nn)
-                return nn
+            function nif(n) {
+                return Number(s[s.length - n])
             }
             let _a1 = nif(1) * 1
             let _a2 = nif(2) * 60 * 1
@@ -78,8 +75,6 @@ var main = {
             } else {
                 result = _a2 + _a1
             }
-            // console.log(s)
-            // console.log(result)
             return result
         },
         cvtVal: function() {
@@ -130,7 +125,7 @@ var main = {
         },     
     }
     main.fn.difference_time = function(first, end) {
-        let distance = first + end
+        let distance = first - end
     
         let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
@@ -156,44 +151,46 @@ var main = {
             } else {
                 next_time = main.session.alerts_saved[index_interval]
             }
-            let difference_next_time = main.fn.difference_time(next_time.getTime(), now * -1)
-            let isGood = difference_next_time.includes('-') ? false : true
-            if (difference_next_time == '-00:00:00') {
-                isGood = true
-            }
-            let code = /*html*/ `
-                <div class="c-start c-log">
-                    <i class="fa-solid fa-hourglass-end"></i>
-                    <span>${main.fn.difference_time(now, main.session.last_click.getTime() * -1)}</span>
-                </div>
-                <div class="c-about">
-                    <div class="c-log">
-                        <i class="fa-solid fa-flag"></i>
-                        <span>${main.fn.tmLocal(main.fn.now(), true)}</span>
+            if (typeof next_time != 'undefined') {
+                let difference_next_time = main.fn.difference_time(next_time.getTime(), now * 1)
+                let isGood = difference_next_time.includes('-') ? false : true
+                if (difference_next_time == '-00:00:00') {
+                    isGood = true
+                }
+                let code = /*html*/ `
+                    <div class="c-start c-log">
+                        <i class="fa-solid fa-hourglass-end"></i>
+                        <span>${main.fn.difference_time(now, main.session.last_click.getTime() * 1)}</span>
                     </div>
-                    <div class="c-log">
-                        <i class="fa-solid fa-stopwatch"></i>
-                        <span>${difference_next_time}</span>
+                    <div class="c-about">
+                        <div class="c-log">
+                            <i class="fa-solid fa-flag"></i>
+                            <span>${main.fn.tmLocal(main.fn.now(), true)}</span>
+                        </div>
+                        <div class="c-log">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <span>${difference_next_time}</span>
+                        </div>
                     </div>
-                </div>
-                <div class="c-icon">
-                    ${isGood ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-solid fa-heart-crack"></i>'}
-                </div>
-            `
-            card.innerHTML = code
-            if (isGood) {
-                card.classList.add('good')
-            } else {
-                card.classList.add('bad')
+                    <div class="c-icon">
+                        ${isGood ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-solid fa-heart-crack"></i>'}
+                    </div>
+                `
+                card.innerHTML = code
+                if (isGood) {
+                    card.classList.add('good')
+                } else {
+                    card.classList.add('bad')
+                }
+                box.appendChild(card)
+                setTimeout(function() {
+                    box.scrollTo({
+                        top: box.scrollHeight,
+                        behavior:'smooth'
+                    })
+                }, 1e2)
+                main.session.last_click = new Date()
             }
-            box.appendChild(card)
-            setTimeout(function() {
-                box.scrollTo({
-                    top: box.scrollHeight,
-                    behavior:'smooth'
-                })
-            }, 1e2)
-            main.session.last_click = new Date()
         }
     }
     $('#btn-step').addEventListener('click', function() {
@@ -266,7 +263,7 @@ var main = {
                             }, 4200)
                         }
                         if (main.session.alerts.length > 0) {
-                            $('#log-alert').innerText = main.fn.difference_time(main.session.alerts[0].getTime(), int_now * -1)
+                            $('#log-alert').innerText = main.fn.difference_time(main.session.alerts[0].getTime(), int_now * 1)
                         } else {
                             $('#log-alert').innerText = '00:00:00'
                         }
@@ -286,16 +283,17 @@ var main = {
                         }, alarm.duration * 1e3)
 
                     }
-                    $('#log-used').innerText = main.fn.difference_time(int_now, main.session.start.getTime() * -1, true)
-                    let ends_min_extra = main.session.ends.getTime() - main.session.margen * 1e3
-                    $('#log-rest').innerText = main.fn.difference_time(ends_min_extra, int_now * -1, true)
-
+                    $('#log-used').innerText = main.fn.difference_time(int_now, main.session.start.getTime() * 1)
+                    let ends_min_extra = main.session.ends.getTime() - main.session.margen * 60e3
+                    $('#log-rest').innerText = main.fn.difference_time(ends_min_extra, int_now * 1)
                     if (update_canvas) {
-                        html2canvas(document.querySelector(".count")).then(canvas => {
-                            main.e.canvas.width = canvas.width
-                            main.e.canvas.height = canvas.height
-                            main.data.draws.cvCtx.drawImage(canvas, 0, 0)
-                        })
+                        if (main.data.requestCanvas) {
+                            html2canvas(document.querySelector(".count")).then(canvas => {
+                                main.e.canvas.width = canvas.width
+                                main.e.canvas.height = canvas.height
+                                main.data.draws.cvCtx.drawImage(canvas, 0, 0)
+                            })
+                        }
                     }
                 } else {
                     if (!$('.error')) {
@@ -417,12 +415,12 @@ var main = {
 
                 if (now.getTime() > mssn.ends.getTime()) {
                     main.fn.errorAlert('La hora de finalización ya pasó. Coloque una hora posterior a la hora actual')
-                } else if (mssn.ends == 'await' && $('#large').value < 1) {
-                    main.fn.errorAlert('Me estas diciendo que quieres que cronometre menos de un minuto? Jodete')
+                } else if ($('#large').value < 1) {
+                    main.fn.errorAlert('No se puede cronometrar menos de un minuto')
                 } else if (mssn.ends.getTime() < mssn.start.getTime()) {
-                    main.fn.errorAlert('Entonces, terminas antes de empezar. Tu tiempo va a la inversa o que mrd?')
-                } else if (mssn.margen > mssn.ends.getTime() - mssn.start.getTime()) {
-                    main.fn.errorAlert('Según tú, tienes más tiempo de margen de seguridad que el mismo tiempo que tienes para la resolución. NO ME JODAS')
+                    main.fn.errorAlert('La hora de fin debe ser después de la hora de inicio')
+                } else if (mssn.margen * 6e4 >= mssn.ends.getTime() - mssn.start.getTime()) {
+                    main.fn.errorAlert('El tiempo de margen de alerta no puede se mayor que el tiempo de espera')
                 }
             })()
             function alertComplete() {
@@ -449,10 +447,14 @@ var main = {
                         video.srcObject = canv.captureStream()
                         video.muted = true
                         video.play()
-                        $('#btn-pip').addEventListener('click', function(){
+                        $('#btn-pip').addEventListener('click', function() {
                             if (document.pictureInPictureElement == null) {
-                                video.requestPictureInPicture()
+                                main.data.requestCanvas = true
+                                setTimeout(function() {
+                                    video.requestPictureInPicture()
+                                }, main.data.interval_canvas_update_seconds * 2 * 1e3)
                             } else {
+                                main.data.requestCanvas = false
                                 document.exitPictureInPicture()
                             }
                         })
@@ -479,14 +481,10 @@ var main = {
         if (test) {
             $('#init-config').click()
             function next_minute() {
-                let now = new Date()
-                let min = 1e3 * 60
-                let result = now.getTime() / min
-                result = Math.floor(result)
-                result = result + 1
-                result = result * min
-                result = new Date(result)
-                return result
+                let now = main.fn.now()
+                let min = 60e3
+                let result = Math.floor(now / min) + 1
+                return new Date(result * min)
             }
             let next = next_minute()
             let value_format = main.fn.decimal(next.getHours()) + ':' + main.fn.decimal(next.getMinutes())
